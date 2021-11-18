@@ -19,11 +19,7 @@
                                     {{priceFormat(product.price)}} 
                                 </div>
 
-                                <div class="product-quantity-wrapper">
-                                    <div @click="product.quantity > 1 ?  product.quantity-- : false" class="change-quantity-button">-</div>
-                                    <input class="product-quantity" type="text" :value="product.quantity">
-                                    <div @click="product.quantity++" class="change-quantity-button">+</div>
-                                </div>
+                                <InputQuantity :product_id="product.id" :quantity="product.quantity" :disallowDelete="true"/>
 
                                 <div class="product-price">
                                     {{priceFormat(product.price * product.quantity)}} 
@@ -56,8 +52,13 @@
 <script>
 import {mapState, mapGetters} from 'vuex'
 import priceFormat from '@/utils/format.js'
+import InputQuantity from '@/components/common/InputQuantity'
 
 export default {
+
+      components: {
+        InputQuantity
+    },
     
     computed: {
             
@@ -88,8 +89,8 @@ export default {
         },
 
         deleteProduct(product) {
-        
-            this.$store.dispatch('deleteProductFromCard', product)
+
+            this.$store.commit('deleteProductFromCard', product)
         }
 
     }

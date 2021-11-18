@@ -31,11 +31,9 @@
                             <router-link to="/cart">Товар в корзине</router-link>                    
                         </div>
 
-                        <div @click="setQuantity($event, product.id, 'dec')" class="change-quantity-button">-</div>
-                        <input @input="setQuantity($event, product.id, 'set')" :value="product.quantity" class="product-quantity" type="text" >
-                        <div @click="setQuantity($event, product.id, 'inc')" class="change-quantity-button">+</div>
+                        <InputQuantity v-if="product.quantity > 0" :product_id="product.id" :quantity="product.quantity"/>
 
-                        <div @click="addProductToBasket(product)" class="button add-to-baket">
+                        <div v-else @click="addProductToBasket(product)" class="button add-to-baket">
                             🛒
                         </div>
                 </div>           
@@ -52,10 +50,15 @@
 <script>
 import {mapActions} from 'vuex'
 import priceFormat from '@/utils/format.js'
+import InputQuantity from '@/components/common/InputQuantity'
 
 export default {
     
     name: 'ProductList',
+
+    components: {
+        InputQuantity
+    },
 
     props: {
         products: {
@@ -126,18 +129,6 @@ export default {
     font-size: 12px;
     margin-top: 10px;
     height: 44px;
-}
-
-.product-quantity {
-    width: 30px;
-    text-align: center;
-}
-
-.change-quantity-button {
-    display: inline-block;
-    cursor: pointer;
-    margin: 4px;
-    font-size: 20px;
 }
 
 .favorite {

@@ -14,13 +14,14 @@ const getters = {
 
         getProducts: (state, getters, rootState) =>  {
 
-            const  inCart = new Set(rootState.cart.list.map(product => product.id))           
+            const  inCart = new Map(rootState.cart.list.map(product => [product.id, product.quantity])) 
             
             return state.list.map(product => ({
 
                 ...product,
 
                 inCart: inCart.has(product.id),
+                quantity: inCart.has(product.id) ? inCart.get(product.id) : 0,
                 isFavorite: state.favorites.has(product.id)
             }))            
         },
@@ -79,33 +80,6 @@ const mutations = {
         }
 
         state.favorites = new Set(state.favorites.values())  
-    },
-
-
-    setQuantity(state, payload) {
-     
-       const productIndex = state.list.findIndex(item => item.id === payload.product_id)
-
-       if (productIndex !== -1) {
-
-            switch (payload.operation) {
-
-                case 'inc': 
-                    state.list[productIndex].quantity++
-                    break;
-
-                    case 'dec':
-                        if (state.list[productIndex].quantity > 1) { 
-                            state.list[productIndex].quantity--
-                        }
-                        break;
-
-                    case 'set':
-                        if (/^\d+$/.test(payload.value)) {            
-                            state.list[productIndex].quantity = payload.value
-                        }    
-            }
-        }
     },
    
 }
